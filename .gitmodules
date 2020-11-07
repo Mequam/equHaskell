@@ -1,3 +1,3 @@
-[submodule "binaryTree"]
-	path = binaryTree
+[submodule "BinaryTreeHs"]
+	path = BinaryTreeHs
 	url = https://github.com/Mequam/BinaryTreeHs.git

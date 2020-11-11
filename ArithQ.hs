@@ -2,16 +2,23 @@ module ArithQ where
 import BinaryTreeHs.BinTree as Bt
 
 --the operation types that must be orderd
-data OppOrdered = Sub | Div | Log | Exp deriving (Show)
+data OppOrdered = Sub | Div | Log | Exp deriving (Eq,Show)
 --the operation types that cannot be orderd
-data OppNoOrdered = Add | Mult deriving (Show)
+data OppNoOrdered = Add | Mult deriving (Eq,Show)
 
 --union of the above two classes/data types represents all operations, for convienence
-data Operation = Order OppOrdered | NoOrder OppNoOrdered deriving (Show)
+data Operation = Order OppOrdered | NoOrder OppNoOrdered deriving (Eq,Show)
 
 --Equation class representing any equation with the above operations
 data Equation a s = Constant a | Variable s | Group OppNoOrdered (Bt.BinaryTree (Equation a s)) | Line OppOrdered [(Equation a s)] deriving (Show)
 
+same :: (Eq a,Eq s) => Equation a s -> Equation a s -> Bool
+same (Constant x) (Constant y) = x == y
+same (Variable x) (Variable y) = x == y
+same (Group opp tree) (Group opp2 tree2) = False
+same (Line order []) (Line order2 []) = order == order2
+same (Line order (v:arr)) (Line order2 (v2:arr2)) = (same v v2) && (same (Line order arr) (Line order2 arr2))
+same _ _ = False
 --this function determines the next function representing performing the given function more than once
 nextOpp :: Operation -> Operation
 nextOpp (NoOrder Add) = (NoOrder Mult)
@@ -38,5 +45,5 @@ equationEqu (Variable x) (Variable y) = x == y
 equationEqu _ _ = False
 
 --default behavior for adding new elements to a group, what to do when equal elements are found 
-equationEquOpp :: Equation a s -> Equation a s
+--equationEquOpp :: Equation a s -> Equation a s
 

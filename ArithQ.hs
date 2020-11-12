@@ -15,10 +15,12 @@ data Equation a s = Constant a | Variable s | Group OppNoOrdered (Bt.BinaryTree 
 same :: (Eq a,Eq s) => Equation a s -> Equation a s -> Bool
 same (Constant x) (Constant y) = x == y
 same (Variable x) (Variable y) = x == y
-same (Group opp tree) (Group opp2 tree2) = False
+--check if the trees are equal
+same (Group opp tree) (Group opp2 tree2) = binContainsAllOf tree (tree2arr tree2)
 same (Line order []) (Line order2 []) = order == order2
 same (Line order (v:arr)) (Line order2 (v2:arr2)) = (same v v2) && (same (Line order arr) (Line order2 arr2))
 same _ _ = False
+
 --this function determines the next function representing performing the given function more than once
 nextOpp :: Operation -> Operation
 nextOpp (NoOrder Add) = (NoOrder Mult)
